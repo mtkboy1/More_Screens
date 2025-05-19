@@ -76,45 +76,7 @@ public class network_activity extends AppCompatActivity {
         ImageView img = findViewById(R.id.src);
         Bitmap bit = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
         Client client = new Client("192.168.0.109",5050);
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.connect("192.168.0.109",5050);
-                TimerTask timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        ArrayList<String> a = new ArrayList<>();
-                        int y=0;
-                        int x=0;
-                        for (int z = 0; z < a.size(); z++) {
-                            if(a.get(z).equals("new")) {
-                                y+=1;
-                                x=0;
-                            } else {
-                                x+=1;
-                                if(x<bit.getWidth()) {
-                                    if(mathUtil.isNumeric(a.get(z))) {
-                                        bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
-                                    } else {
-                                        bit.setPixel(x, y, Color.rgb(0, 0, 0));
-                                    }
-                                }
-                            }
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //bit = BitmapUtil.setBackground(bit,Color.RED);
-                                img.setImageBitmap(bit);
-                            }
-                        });
-                        a = client.readStr();
-                    }
-                };
-                Timer timer = new Timer("hi");
-                timer.schedule(timerTask,100,100);
-            }
-        }).start();*/
+
         new Thread(new Runnable() {
             @Override
             public void run() {

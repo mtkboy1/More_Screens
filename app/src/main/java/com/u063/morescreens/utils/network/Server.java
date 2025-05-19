@@ -19,37 +19,6 @@ public class Server {
     private ServerSocket serverSocket;
     private ArrayList<Socket> sockets = new ArrayList<>();
     //private Socket client;
-    public Server(){
-        try {
-            serverSocket = new ServerSocket();
-            serverSocket.bind(new InetSocketAddress(5050));
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true){
-                        try {
-                            while (true) {
-                                Socket sock = serverSocket.accept();
-                                //client = sock;
-                                sockets.add(sock);
-                                /*byte  b[] = new byte[127];
-                                for(byte i=0; i<(byte) 127; i++){
-                                    b[i]=i;
-                                }
-                                send(b);*/
-                                Log.e("Client","new");
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }).start();
-            Log.e("",serverSocket.getLocalSocketAddress().toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public Server(int type){
         try {
             serverSocket = new ServerSocket();
