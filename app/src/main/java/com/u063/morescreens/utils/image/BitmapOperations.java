@@ -38,4 +38,16 @@ public class BitmapOperations {
         b[b.length-1] = 0;
         return b;
     }
+    public static String[] getStringArray(int type, Bitmap bitmap){
+        String b[] = new String[bitmap.getHeight()];
+        for(int y=0; y<bitmap.getHeight(); y++){
+            for(int x=0; x<bitmap.getWidth(); x++){
+                b[y] += Color.red(bitmap.getPixel(x, y));
+                b[y] += "\n";
+            }
+            b[y] += "new";
+            b[y] += "\n";
+        }
+        return b;
+    }
 }

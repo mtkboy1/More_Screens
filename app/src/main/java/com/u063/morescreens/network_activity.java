@@ -20,6 +20,7 @@ import com.u063.morescreens.utils.BitmapUtil;
 import com.u063.morescreens.utils.Database.Database;
 import com.u063.morescreens.utils.Database.ManageDatabase;
 import com.u063.morescreens.utils.image.BitmapOperations;
+import com.u063.morescreens.utils.mathUtil;
 import com.u063.morescreens.utils.network.Client;
 import com.u063.morescreens.utils.network.Server;
 
@@ -50,16 +51,19 @@ public class network_activity extends AppCompatActivity {
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
-                            Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                            Bitmap b = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
                             Random r = new Random();
-                            b = BitmapUtil.setBackground(b, Color.rgb(255,0,0));
-                            b = BitmapUtil.drawRect(b,10,10,50,50,Color.rgb(0,r.nextInt(),0));
-                            byte[] bytes = BitmapOperations.getByteArray(0, b);
+                            b = BitmapUtil.setBackground(b, Color.rgb(255,255,255));
+                            b = BitmapUtil.drawRect(b,10,10,50,50,Color.rgb(50,0,0));
+                            b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
+                            b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
+                            //byte[] bytes = BitmapOperations.getByteArray(0, b);
+                            String[] bytes = BitmapOperations.getStringArray(0, b);
                             s.send(bytes);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,10000,10000);
+                    timer.schedule(timerTask,300,300);
                 }
             }
         }).start();
@@ -70,29 +74,80 @@ public class network_activity extends AppCompatActivity {
     }
     public void connect(View view){
         ImageView img = findViewById(R.id.src);
+        Bitmap bit = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
         Client client = new Client("192.168.0.109",5050);
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.connect("192.168.0.109",5050);
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        ArrayList<String> a = new ArrayList<>();
+                        int y=0;
+                        int x=0;
+                        for (int z = 0; z < a.size(); z++) {
+                            if(a.get(z).equals("new")) {
+                                y+=1;
+                                x=0;
+                            } else {
+                                x+=1;
+                                if(x<bit.getWidth()) {
+                                    if(mathUtil.isNumeric(a.get(z))) {
+                                        bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
+                                    } else {
+                                        bit.setPixel(x, y, Color.rgb(0, 0, 0));
+                                    }
+                                }
+                            }
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //bit = BitmapUtil.setBackground(bit,Color.RED);
+                                img.setImageBitmap(bit);
+                            }
+                        });
+                        a = client.readStr();
+                    }
+                };
+                Timer timer = new Timer("hi");
+                timer.schedule(timerTask,100,100);
+            }
+        }).start();*/
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<Integer> a = new ArrayList<>();
+                ArrayList<String> a = new ArrayList<>();
                 client.connect("192.168.0.109",5050);
+                Bitmap bit = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
                 while(true) {
-                    Bitmap bit = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-                    for (int x = 0; x < 100; x++) {
-                        for (int y = 0; y < 100; y++) {
-                            if(a.size()>x*y) {
-                                bit.setPixel(x, y,Color.rgb(a.get(x * y),0,0));
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //bit = BitmapUtil.setBackground(bit,Color.RED);
-                                    img.setImageBitmap(bit);
+
+                    int y=0;
+                    int x=0;
+                    for (int z = 0; z < a.size(); z++) {
+                        if(a.get(z).equals("new")) {
+                            y+=1;
+                            x=0;
+                        } else {
+                            x+=1;
+                            if(x<bit.getWidth()) {
+                                if(mathUtil.isNumeric(a.get(z))) {
+                                    bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
+                                } else {
+                                    bit.setPixel(x, y, Color.rgb(0, 0, 0));
                                 }
-                            });
+                            }
                         }
                     }
-                    a = client.read();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //bit = BitmapUtil.setBackground(bit,Color.RED);
+                            img.setImageBitmap(bit);
+                        }
+                    });
+                    a = client.readStr();
                 }
 
             }

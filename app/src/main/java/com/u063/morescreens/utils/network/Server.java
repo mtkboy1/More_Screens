@@ -2,8 +2,12 @@ package com.u063.morescreens.utils.network;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -60,8 +64,31 @@ public class Server {
                 try {
                     for(int z=0; z<bytes.length; z++) {
                         Log.e("Client", "" + i);
-                        OutputStream o = sockets.get(i).getOutputStream();
-                        o.write(bytes);
+                        BufferedWriter o = new BufferedWriter(new OutputStreamWriter(sockets.get(i).getOutputStream()));
+                        //OutputStream o = sockets.get(i).getOutputStream();
+                        //o.write(bytes);
+                        o.write(bytes[z]);
+                        o.flush();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+    public void send(String[] bytes){
+        for (int i = 0; i < sockets.size(); i++) {
+            if(!sockets.get(i).isClosed()) {
+                try {
+                    for(int z=0; z<bytes.length; z++) {
+                        Log.e("Client", "" + i);
+                        BufferedWriter o = new BufferedWriter(new OutputStreamWriter(sockets.get(i).getOutputStream()));
+                        //OutputStream o = sockets.get(i).getOutputStream();
+                        //o.write(bytes);
+                        if(!bytes[z].equals("null255")) {
+                            o.write(bytes[z]);
+                        }
+                        o.flush();
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);

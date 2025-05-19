@@ -12,22 +12,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
-    private Socket socket;
+    private final Socket socket;
 
     public Client(String ip, int port){
         socket = new Socket();
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //socket.connect(new InetSocketAddress(ip,port));
-                    //read();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();*/
-        // socket.connect(new InetSocketAddress(ip,port));
     }
     public void connect(String ip, int port){
         try {
@@ -47,15 +35,8 @@ public class Client {
                 for(int iw=0; iw<100*100; iw++){
                     //while(b){
                     int b = bf.read();
-                    if(b==0){
-                        b=0;
-                    }
-                    if(b==-1){
-                        socket.close();
-                        return i;
-                    }
                     i.add(b);
-                    //Log.e("","recived: "+ b);
+                    Log.e("","recived: "+ b);
 
                 }
                 return i;
@@ -64,5 +45,24 @@ public class Client {
             }
         }
         return null;
+    }
+    public ArrayList<String> readStr(){
+        ArrayList<String> i = new ArrayList<>();
+        Boolean thatsAll = false;
+        try {
+            BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String s = "";
+
+            for (int z = 0; z < 50 * 50; z++) {
+                //while(b){
+                s= bf.readLine();
+                i.add(s);
+                Log.e("", "recived: " + s);
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return i;
     }
 }
