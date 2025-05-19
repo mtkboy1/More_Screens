@@ -21,7 +21,7 @@ public class BitmapOperations {
         return b;
     }
     public static byte[] getByteArray(int type, Bitmap bitmap){
-        byte b[] = new byte[bitmap.getHeight()*bitmap.getWidth()];
+        byte b[] = new byte[(bitmap.getHeight()*bitmap.getWidth())+1];
         for(int x=0; x<bitmap.getWidth(); x++){
             for(int y=0; y<bitmap.getHeight(); y++){
                 if(type==0) {
@@ -35,6 +35,7 @@ public class BitmapOperations {
                 }
             }
         }
+        b[b.length-1] = 0;
         return b;
     }
 }

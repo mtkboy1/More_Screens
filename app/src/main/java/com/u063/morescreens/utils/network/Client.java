@@ -44,17 +44,21 @@ public class Client {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String s = "";
 
-                while(true){
+                for(int iw=0; iw<100*100; iw++){
                     //while(b){
                     int b = bf.read();
+                    if(b==0){
+                        b=0;
+                    }
                     if(b==-1){
                         socket.close();
                         return i;
                     }
                     i.add(b);
-                    Log.e("","recived: "+ b);
+                    //Log.e("","recived: "+ b);
 
                 }
+                return i;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

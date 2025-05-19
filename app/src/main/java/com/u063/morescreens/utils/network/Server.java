@@ -58,9 +58,11 @@ public class Server {
         for (int i = 0; i < sockets.size(); i++) {
             if(!sockets.get(i).isClosed()) {
                 try {
-                    Log.e("Client", "" + i);
-                    OutputStream o = sockets.get(i).getOutputStream();
-                    o.write(bytes);
+                    for(int z=0; z<bytes.length; z++) {
+                        Log.e("Client", "" + i);
+                        OutputStream o = sockets.get(i).getOutputStream();
+                        o.write(bytes);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

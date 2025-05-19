@@ -5,6 +5,7 @@ import static android.view.View.GONE;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.u063.morescreens.utils.network.Client;
 import com.u063.morescreens.utils.network.Server;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,23 +50,16 @@ public class network_activity extends AppCompatActivity {
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
-                            Bitmap b = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
-                            b = BitmapUtil.setBackground(b, Color.RED);
-                            s.send(BitmapOperations.getByteArray(0, b));
+                            Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                            Random r = new Random();
+                            b = BitmapUtil.setBackground(b, Color.rgb(255,0,0));
+                            b = BitmapUtil.drawRect(b,10,10,50,50,Color.rgb(0,r.nextInt(),0));
+                            byte[] bytes = BitmapOperations.getByteArray(0, b);
+                            s.send(bytes);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,5000,5000);
-                    /*new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while(true) {
-                                Bitmap b = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-                                b = BitmapUtil.setBackground(b, Color.RED);
-                                s.send(BitmapOperations.getByteArray(0, b));
-                            }
-                        }
-                    }).start()*/
+                    timer.schedule(timerTask,10000,10000);
                 }
             }
         }).start();
@@ -76,19 +71,22 @@ public class network_activity extends AppCompatActivity {
     public void connect(View view){
         ImageView img = findViewById(R.id.src);
         Client client = new Client("192.168.0.109",5050);
-        Bitmap bit = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<Integer> a = null;
+                ArrayList<Integer> a = new ArrayList<>();
                 client.connect("192.168.0.109",5050);
                 while(true) {
+                    Bitmap bit = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
                     for (int x = 0; x < 100; x++) {
                         for (int y = 0; y < 100; y++) {
-                            bit.setPixel(x, y, a.get(x*y));
+                            if(a.size()>x*y) {
+                                bit.setPixel(x, y,Color.rgb(a.get(x * y),0,0));
+                            }
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    //bit = BitmapUtil.setBackground(bit,Color.RED);
                                     img.setImageBitmap(bit);
                                 }
                             });
