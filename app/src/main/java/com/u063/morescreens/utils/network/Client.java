@@ -57,12 +57,11 @@ public class Client {
                 //while(b){
                 s = bf.readLine();
                 i.add(s);
-                Log.e("", "recived: " + s);
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Log.e("", "thats all");
         return i;
     }
 

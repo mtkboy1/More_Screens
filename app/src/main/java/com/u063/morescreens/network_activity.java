@@ -6,12 +6,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -31,7 +34,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class network_activity extends AppCompatActivity {
-    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
+    private Bitmap bitmaps;
     int sy = 400, sx = 300;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,16 @@ public class network_activity extends AppCompatActivity {
             return insets;
         });
     }
+    Context c = this;
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message message) {
+            Bundle msg = message.getData();
+            ArrayList<String> a = msg.getStringArrayList("data");
+
+            return false;
+        }
+    });
     public void host(View view){
         Server s = new Server(0);
         new Thread(new Runnable() {
@@ -56,7 +69,7 @@ public class network_activity extends AppCompatActivity {
                         public void run() {
                             Bitmap b = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
                             Random r = new Random();
-                            b = BitmapUtil.setBackground(b, Color.rgb(255,255,255));
+                            b = BitmapUtil.setBackground(b, Color.rgb(r.nextInt(),255,255));
                             b = BitmapUtil.drawRect(b,50,10,50,50,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
@@ -65,7 +78,7 @@ public class network_activity extends AppCompatActivity {
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,5000,300);
+                    timer.schedule(timerTask,500,300);
                 }
             }
         }).start();
@@ -75,18 +88,18 @@ public class network_activity extends AppCompatActivity {
         host.setVisibility(GONE);
     }
     public void connect(View view){
-        ImageView img = findViewById(R.id.src);
         Client client = new Client("192.168.0.109",5050);
-        Context c = this;
         client.setSx(sx);
         client.setSy(sy);
+        ImageView img = findViewById(R.id.src);
+        Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ArrayList<String> a = new ArrayList<>();
                 client.connect("192.168.0.109",5050);
-                Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
                 while(true) {
+
                     int y=0;
                     int x=0;
                     for (int z = 0; z < a.size(); z++) {
@@ -104,15 +117,25 @@ public class network_activity extends AppCompatActivity {
                             }
                         }
                     }
-                    bit=BitmapOperations.readData(bit,c);
-                    Bitmap finalBit = bit;
-                    runOnUiThread(new Runnable() {
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            img.setImageBitmap(finalBit);
+                            Bitmap finalBit=BitmapOperations.readData(bit,c);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    img.setImageBitmap(finalBit);
+                                }
+                            });
                         }
-                    });
+                    }).start();
+
+                    Bundle b = new Bundle();
                     a = client.readStr();
+                    b.putStringArrayList("data",a);
+                    Message msg = new Message();
+                    msg.setData(b);
+                    handler.sendMessage(msg);
                 }
 
             }
@@ -122,5 +145,4 @@ public class network_activity extends AppCompatActivity {
         host = findViewById(R.id.connect);
         host.setVisibility(GONE);
     }
-
 }
