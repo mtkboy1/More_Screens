@@ -145,4 +145,41 @@ public class network_activity extends AppCompatActivity {
         host = findViewById(R.id.connect);
         host.setVisibility(GONE);
     }
+    private void bitmapReader(){
+        /*bitmaps = bit;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int y=0;
+                int x=0;
+                for (int z = 0; z < a.size(); z++) {
+                    if(a.get(z).equals("new")) {
+                        y+=1;
+                        x=0;
+                    } else {
+                        x+=1;
+                        if(x<bit.getWidth()&&y<bit.getHeight()) {
+                            if(mathUtil.isNumeric(a.get(z))) {
+                                bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
+                            } else {
+                                bit.setPixel(x, y, Color.rgb(0, 0, 0));
+                            }
+                        }
+                    }
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bitmap finalBit=BitmapOperations.readData(bit,c);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                img.setImageBitmap(finalBit);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        }).start();*/
+    }
 }

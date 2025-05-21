@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         img.setImageBitmap(b);
 
         img1 = findViewById(R.id.big);
-        img1.setImageBitmap(readData(b));
+        //img1.setImageBitmap(readData(b));
     }
 
     private static int getAnInt(int yc, int y) {

@@ -17,7 +17,7 @@ public class BitmapOperations {
         int sx=10;
         int sy=10;
         ArrayList<Database> database = ManageDatabase.read(context);
-        for(int i=0; i<database.size(); i++){
+        for(int i=1; i<database.size(); i++){
             x = Integer.parseInt(database.get(database.size()-1).getVals("posX").get(0));
             y = Integer.parseInt(database.get(database.size()-1).getVals("posY").get(0));
             sx = Integer.parseInt(database.get(database.size()-1).getVals("sX").get(0));
