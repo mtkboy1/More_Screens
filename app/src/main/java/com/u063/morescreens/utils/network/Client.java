@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Client {
     private final Socket socket;
-
+    private int sx,sy;
     public Client(String ip, int port){
         socket = new Socket();
     }
@@ -53,9 +53,9 @@ public class Client {
             BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String s = "";
 
-            for (int z = 0; z < 50 * 50; z++) {
+            for (int z = 0; z < sx * sy; z++) {
                 //while(b){
-                s= bf.readLine();
+                s = bf.readLine();
                 i.add(s);
                 Log.e("", "recived: " + s);
 
@@ -64,5 +64,12 @@ public class Client {
             throw new RuntimeException(e);
         }
         return i;
+    }
+
+    public void setSx(int sx) {
+        this.sx = sx;
+    }
+    public void setSy(int sy) {
+        this.sy = sy;
     }
 }

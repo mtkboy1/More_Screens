@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         img.setImageBitmap(b);
 
         img1 = findViewById(R.id.big);
-        //img1.setImageBitmap(readData(b));
+        img1.setImageBitmap(readData(b));
     }
 
     private static int getAnInt(int yc, int y) {
@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
         int sy=10;
         ArrayList<Database> database = ManageDatabase.read(this);
         for(int i=0; i<database.size(); i++){
-            x = Integer.parseInt(database.get(i).getVals("posX").get(0));
-            y = Integer.parseInt(database.get(i).getVals("posY").get(0));
-            sx = Integer.parseInt(database.get(i).getVals("sX").get(0));
-            sy = Integer.parseInt(database.get(i).getVals("sY").get(0));
+            x = Integer.parseInt(database.get(database.size()-1).getVals("posX").get(0));
+            y = Integer.parseInt(database.get(database.size()-1).getVals("posY").get(0));
+            sx = Integer.parseInt(database.get(database.size()-1).getVals("sX").get(0));
+            sy = Integer.parseInt(database.get(database.size()-1).getVals("sY").get(0));
         }
         return BitmapOperations.getHalfImage(b,x,y,sx,sy);
     }

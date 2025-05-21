@@ -76,14 +76,16 @@ public class Database {
 
         if (fs != null) {
             for(File ff:fs){
-                table.put(ff.getName(),new ArrayList<String>());
+                createTable(ff.getName());
+                //table.put(ff.getName(),new ArrayList<String>());
                 try {
                     BufferedReader in = new BufferedReader(new FileReader(context.getFilesDir()+"/"+name+"/"+ff.getName()));
                     String s = "in.readLine()";
                     while((s=in.readLine())!=null){
                         putVal(ff.getName(),s);
-                        Log.e("daar",""+s);
+                        //Log.e("daar",""+getVals("posX").get(0));
                     }
+                    in.close();
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);

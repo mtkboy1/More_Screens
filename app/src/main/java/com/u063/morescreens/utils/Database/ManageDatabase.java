@@ -1,6 +1,7 @@
 package com.u063.morescreens.utils.Database;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;

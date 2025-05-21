@@ -2,6 +2,7 @@ package com.u063.morescreens;
 
 import static android.view.View.GONE;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class network_activity extends AppCompatActivity {
+    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
+    int sy = 400, sx = 300;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +54,18 @@ public class network_activity extends AppCompatActivity {
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
-                            Bitmap b = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
+                            Bitmap b = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
                             Random r = new Random();
                             b = BitmapUtil.setBackground(b, Color.rgb(255,255,255));
-                            b = BitmapUtil.drawRect(b,10,10,50,50,Color.rgb(50,0,0));
+                            b = BitmapUtil.drawRect(b,50,10,50,50,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
-                            //byte[] bytes = BitmapOperations.getByteArray(0, b);
                             String[] bytes = BitmapOperations.getStringArray(0, b);
                             s.send(bytes);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,300,300);
+                    timer.schedule(timerTask,5000,300);
                 }
             }
         }).start();
@@ -74,17 +76,17 @@ public class network_activity extends AppCompatActivity {
     }
     public void connect(View view){
         ImageView img = findViewById(R.id.src);
-        Bitmap bit = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
         Client client = new Client("192.168.0.109",5050);
-
+        Context c = this;
+        client.setSx(sx);
+        client.setSy(sy);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ArrayList<String> a = new ArrayList<>();
                 client.connect("192.168.0.109",5050);
-                Bitmap bit = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
+                Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
                 while(true) {
-
                     int y=0;
                     int x=0;
                     for (int z = 0; z < a.size(); z++) {
@@ -93,7 +95,7 @@ public class network_activity extends AppCompatActivity {
                             x=0;
                         } else {
                             x+=1;
-                            if(x<bit.getWidth()) {
+                            if(x<bit.getWidth()&&y<bit.getHeight()) {
                                 if(mathUtil.isNumeric(a.get(z))) {
                                     bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
                                 } else {
@@ -102,11 +104,12 @@ public class network_activity extends AppCompatActivity {
                             }
                         }
                     }
+                    bit=BitmapOperations.readData(bit,c);
+                    Bitmap finalBit = bit;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //bit = BitmapUtil.setBackground(bit,Color.RED);
-                            img.setImageBitmap(bit);
+                            img.setImageBitmap(finalBit);
                         }
                     });
                     a = client.readStr();
@@ -119,19 +122,5 @@ public class network_activity extends AppCompatActivity {
         host = findViewById(R.id.connect);
         host.setVisibility(GONE);
     }
-    private Bitmap readData(Bitmap bitmap){
-        Bitmap b = bitmap;
-        int x=10;
-        int y=10;
-        int sx=10;
-        int sy=10;
-        ArrayList<Database> database = ManageDatabase.read(this);
-        for(int i=0; i<database.size(); i++){
-            x = Integer.parseInt(database.get(i).getVals("posX").get(0));
-            y = Integer.parseInt(database.get(i).getVals("posY").get(0));
-            sx = Integer.parseInt(database.get(i).getVals("sX").get(0));
-            sy = Integer.parseInt(database.get(i).getVals("sY").get(0));
-        }
-        return BitmapOperations.getHalfImage(b,x,y,sx,sy);
-    }
+
 }
