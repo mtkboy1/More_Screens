@@ -60,22 +60,30 @@ public class BitmapOperations {
         }
         return b;
     }
-    public static byte[] getByteArray(int type, Bitmap bitmap){
-        byte b[] = new byte[(bitmap.getHeight()*bitmap.getWidth())+1];
+    public static String[] getByteArray(int type, Bitmap bitmap){
+        /*byte b[] = new byte[bitmap.getWidth()*bitmap.getHeight()];
         for(int x=0; x<bitmap.getWidth(); x++){
             for(int y=0; y<bitmap.getHeight(); y++){
                 if(type==0) {
-                    b[x*y] = (byte) Color.red(bitmap.getPixel(x, y));
+                    b[x+y] = (byte) Color.red(bitmap.getPixel(x, y));
                 }
                 if(type==1) {
-                    b[x*y] = (byte) Color.green(bitmap.getPixel(x, y));
+                    b[x+y] = (byte) Color.green(bitmap.getPixel(x, y));
                 }
                 if(type==2) {
-                    b[x*y] = (byte) Color.blue(bitmap.getPixel(x, y));
+                    b[x+y] = (byte) Color.blue(bitmap.getPixel(x, y));
                 }
             }
+        }*/
+        String b[] = new String[bitmap.getHeight()];
+        for(int y=0; y<bitmap.getHeight(); y++){
+            for(int x=0; x<bitmap.getWidth(); x++){
+                b[y] += (char) Color.red(bitmap.getPixel(x, y));
+                b[y] += "\n";
+            }
+            b[y] += "new";
+            b[y] += "\n";
         }
-        b[b.length-1] = 0;
         return b;
     }
     public static String[] getStringArray(int type, Bitmap bitmap){

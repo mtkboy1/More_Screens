@@ -73,12 +73,14 @@ public class network_activity extends AppCompatActivity {
                             b = BitmapUtil.drawRect(b,50,10,50,50,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
-                            String[] bytes = BitmapOperations.getStringArray(0, b);
+                            //String[] bytes = BitmapOperations.getStringArray(0, b);
+                            //byte[][] bytes = BitmapOperations.getByteArray(0,b);
+                            String[] bytes = BitmapOperations.getByteArray(0,b);
                             s.send(bytes);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,500,300);
+                    timer.schedule(timerTask,700,700);
                 }
             }
         }).start();
@@ -92,50 +94,30 @@ public class network_activity extends AppCompatActivity {
         client.setSx(sx);
         client.setSy(sy);
         ImageView img = findViewById(R.id.src);
-        Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
+        client.init();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<String> a = new ArrayList<>();
+                //ArrayList<String> a = new ArrayList<>();
                 client.connect("192.168.0.109",5050);
                 while(true) {
-
-                    int y=0;
-                    int x=0;
-                    for (int z = 0; z < a.size(); z++) {
-                        if(a.get(z).equals("new")) {
-                            y+=1;
-                            x=0;
-                        } else {
-                            x+=1;
-                            if(x<bit.getWidth()&&y<bit.getHeight()) {
-                                if(mathUtil.isNumeric(a.get(z))) {
-                                    bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
-                                } else {
-                                    bit.setPixel(x, y, Color.rgb(0, 0, 0));
-                                }
-                            }
-                        }
-                    }
-                    new Thread(new Runnable() {
+                    //client.readStr();
+                    Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
+                    bit = client.readBitmap(sx,sy);
+                    Bitmap finalBit=bit;//BitmapOperations.readData(bit,c);
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Bitmap finalBit=BitmapOperations.readData(bit,c);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    img.setImageBitmap(finalBit);
-                                }
-                            });
+                            img.setImageBitmap(finalBit);
                         }
-                    }).start();
+                    });
 
                     Bundle b = new Bundle();
-                    a = client.readStr();
-                    b.putStringArrayList("data",a);
+                    //a = client.readStr();
+                    /*b.putStringArrayList("data",a);
                     Message msg = new Message();
                     msg.setData(b);
-                    handler.sendMessage(msg);
+                    handler.sendMessage(msg);*/
                 }
 
             }
@@ -145,41 +127,5 @@ public class network_activity extends AppCompatActivity {
         host = findViewById(R.id.connect);
         host.setVisibility(GONE);
     }
-    private void bitmapReader(){
-        /*bitmaps = bit;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int y=0;
-                int x=0;
-                for (int z = 0; z < a.size(); z++) {
-                    if(a.get(z).equals("new")) {
-                        y+=1;
-                        x=0;
-                    } else {
-                        x+=1;
-                        if(x<bit.getWidth()&&y<bit.getHeight()) {
-                            if(mathUtil.isNumeric(a.get(z))) {
-                                bit.setPixel(x, y, Color.rgb(Integer.parseInt(a.get(z)), 0, 0));
-                            } else {
-                                bit.setPixel(x, y, Color.rgb(0, 0, 0));
-                            }
-                        }
-                    }
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Bitmap finalBit=BitmapOperations.readData(bit,c);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                img.setImageBitmap(finalBit);
-                            }
-                        });
-                    }
-                }).start();
-            }
-        }).start();*/
-    }
+
 }

@@ -66,13 +66,22 @@ public class Server {
         }
     }
     public void send(byte[] bytes, int id){
-        if(!sockets.get(id).isClosed()) {
-            try {
-                Log.e("Client", "" + id);
-                OutputStream o = sockets.get(id).getOutputStream();
-                o.write(bytes);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        for (int i = 0; i < sockets.size(); i++) {
+            if (!sockets.get(id).isClosed()) {
+                try {
+                    Log.e("Client", "" + id);
+                    for (int z = 0; z < bytes.length; z++) {
+                        //Log.e("Client", "" + i);
+                        String bb = ""+(char) bytes[z];
+                        BufferedWriter o = new BufferedWriter(new OutputStreamWriter(sockets.get(i).getOutputStream()));
+                        //OutputStream o = sockets.get(i).getOutputStream();
+                        //o.write(bytes);
+                        o.write((String) bb+"\n");
+                        o.flush();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
