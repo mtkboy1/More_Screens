@@ -29,10 +29,8 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
-    private void sendChar(int id, String b){
-        BufferedWriter o = null;
+    private void sendChar(BufferedWriter o, String b){
         try {
-            o = new BufferedWriter(new OutputStreamWriter(sockets.get(id).getOutputStream()));
             o.write(b);
             o.flush();
         } catch (IOException e) {
@@ -40,19 +38,26 @@ public class Server {
         }
     }
     public void sendBitmap(int type, Bitmap bitmap){
+
         String b[] = new String[bitmap.getHeight()];
         for (int i = 0; i < sockets.size(); i++) {
-            for (int y = 0; y < bitmap.getHeight(); y++) {
-                for (int x = 0; x < bitmap.getWidth(); x++) {
-                    b[y] += (char) Color.red(bitmap.getPixel(x, y));
+            try {
+                BufferedWriter o = new BufferedWriter(new OutputStreamWriter(sockets.get(i).getOutputStream()));
+                for (int y = 0; y < bitmap.getHeight(); y++) {
+                    for (int x = 0; x < bitmap.getWidth(); x++) {
+                        b[y] += (char) Color.red(bitmap.getPixel(x, y));
+                        b[y] += "\n";
+                        //sendChar(i,b[y]);
+                    }
+                    b[y] += "n";
                     b[y] += "\n";
-                    sendChar(i,b[y]);
+                    sendChar(o, b[y]);
                 }
-                b[y] += "new";
-                b[y] += "\n";
-                sendChar(i,b[y]);
+            }  catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
+        Log.i("ALL","ALL");
     }
     public void send(byte[] bytes){
         for (int i = 0; i < sockets.size(); i++) {

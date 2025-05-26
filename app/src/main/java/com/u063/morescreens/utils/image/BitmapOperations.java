@@ -81,7 +81,7 @@ public class BitmapOperations {
                 b[y] += (char) Color.red(bitmap.getPixel(x, y));
                 b[y] += "\n";
             }
-            b[y] += "new";
+            b[y] += "n";
             b[y] += "\n";
         }
         return b;
@@ -93,7 +93,7 @@ public class BitmapOperations {
                 b[y] += Color.red(bitmap.getPixel(x, y));
                 b[y] += "\n";
             }
-            b[y] += "new";
+            b[y] += "n";
             b[y] += "\n";
         }
         return b;

@@ -27,6 +27,8 @@ import com.u063.morescreens.utils.image.BitmapOperations;
 import com.u063.morescreens.utils.mathUtil;
 import com.u063.morescreens.utils.network.Client;
 import com.u063.morescreens.utils.network.Server;
+import com.u063.morescreens.utils.network.network_client;
+import com.u063.morescreens.utils.network.network_socket;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -58,29 +60,34 @@ public class network_activity extends AppCompatActivity {
         }
     });
     public void host(View view){
-        Server s = new Server(0);
+
+        network_socket server = new network_socket(1);
+
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    s.getClient();
+                    //s.getClient();
+                    //server.getClient();
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
                             Bitmap b = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
                             Random r = new Random();
-                            b = BitmapUtil.setBackground(b, Color.rgb(r.nextInt(),255,255));
+                            b = BitmapUtil.setBackground(b, Color.rgb(255,255,255));
                             b = BitmapUtil.drawRect(b,50,10,50,50,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
+                            Bitmap finalB = b;
                             //String[] bytes = BitmapOperations.getStringArray(0, b);
                             //byte[][] bytes = BitmapOperations.getByteArray(0,b);
                             //String[] bytes = BitmapOperations.getByteArray(0,b);
-                            s.sendBitmap(0,b);
+                            //server.sendBitmap(finalB,0);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,100,100);
+                    timer.schedule(timerTask,10,10);
                 }
             }
         }).start();
@@ -90,20 +97,14 @@ public class network_activity extends AppCompatActivity {
         host.setVisibility(GONE);
     }
     public void connect(View view){
-        Client client = new Client("192.168.0.109",5050);
-        client.setSx(sx);
-        client.setSy(sy);
+        network_client client = new network_client(1);
         ImageView img = findViewById(R.id.src);
-        client.init();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //ArrayList<String> a = new ArrayList<>();
-                client.connect("192.168.0.109",5050);
                 while(true) {
-                    //client.readStr();
                     Bitmap bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
-                    bit = client.readBitmap(sx,sy);
+                    bit = client.readBitmap(sx,sy);//client.readBitmap(sx,sy);
                     Bitmap finalBit=bit;//BitmapOperations.readData(bit,c);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -111,13 +112,6 @@ public class network_activity extends AppCompatActivity {
                             img.setImageBitmap(finalBit);
                         }
                     });
-
-                    Bundle b = new Bundle();
-                    //a = client.readStr();
-                    /*b.putStringArrayList("data",a);
-                    Message msg = new Message();
-                    msg.setData(b);
-                    handler.sendMessage(msg);*/
                 }
 
             }

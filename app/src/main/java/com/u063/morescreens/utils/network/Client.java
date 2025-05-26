@@ -19,12 +19,14 @@ public class Client {
     private final Socket socket;
     private int sx,sy;
     Bitmap bit;
-    public Client(String ip, int port){
+    public Client(){
         socket = new Socket();
     }
     public void connect(String ip, int port){
         try {
-            socket.connect(new InetSocketAddress(ip,port));
+            if(!socket.isConnected()) {
+                socket.connect(new InetSocketAddress(ip, port));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -89,7 +91,7 @@ public class Client {
                     int b = (int) s.charAt(0);
                     // Log.e("", s);
                     //Log.e("", ""+b);
-                    if (s.equals("new")) {
+                    if (s.equals("n")) {
                         y += 1;
                         x = 0;
                     } else {
