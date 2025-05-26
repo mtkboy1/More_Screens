@@ -75,12 +75,12 @@ public class network_activity extends AppCompatActivity {
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
                             //String[] bytes = BitmapOperations.getStringArray(0, b);
                             //byte[][] bytes = BitmapOperations.getByteArray(0,b);
-                            String[] bytes = BitmapOperations.getByteArray(0,b);
-                            s.send(bytes);
+                            //String[] bytes = BitmapOperations.getByteArray(0,b);
+                            s.sendBitmap(0,b);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,700,700);
+                    timer.schedule(timerTask,100,100);
                 }
             }
         }).start();
