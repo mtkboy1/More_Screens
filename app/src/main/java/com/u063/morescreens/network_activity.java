@@ -61,7 +61,7 @@ public class network_activity extends AppCompatActivity {
     });
     public void host(View view){
 
-        network_socket server = new network_socket(1);
+        network_socket server = new network_socket(0);
 
 
         new Thread(new Runnable() {
@@ -69,7 +69,7 @@ public class network_activity extends AppCompatActivity {
             public void run() {
                 while (true) {
                     //s.getClient();
-                    //server.getClient();
+                    server.getClient();
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
@@ -83,11 +83,13 @@ public class network_activity extends AppCompatActivity {
                             //String[] bytes = BitmapOperations.getStringArray(0, b);
                             //byte[][] bytes = BitmapOperations.getByteArray(0,b);
                             //String[] bytes = BitmapOperations.getByteArray(0,b);
-                            //server.sendBitmap(finalB,0);
+                            server.sendBitmap(finalB,0);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,10,10);
+                    timer.schedule(timerTask,10,100);
+
+
                 }
             }
         }).start();
@@ -97,7 +99,7 @@ public class network_activity extends AppCompatActivity {
         host.setVisibility(GONE);
     }
     public void connect(View view){
-        network_client client = new network_client(1);
+        network_client client = new network_client(0);
         ImageView img = findViewById(R.id.src);
         new Thread(new Runnable() {
             @Override
