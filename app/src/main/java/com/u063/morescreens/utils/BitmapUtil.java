@@ -12,7 +12,7 @@ public class BitmapUtil {
         }
         return bit;
     }
-    static public Bitmap drawRect(Bitmap bitmap, int x, int y, int sizeX, int sizeY, int color){
+    static public Bitmap drawRect(Bitmap bitmap, int x, int y, int sizeX, int sizeY, int color){ //рисуем квадрат
         Bitmap bit = bitmap;
         int sY = sizeY+y;
         int sX = sizeX+x;

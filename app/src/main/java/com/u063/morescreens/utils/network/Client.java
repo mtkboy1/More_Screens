@@ -34,7 +34,8 @@ public class Client {
     public void init(){
         bit = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
     }
-    public ArrayList<Integer> read(){
+    /// ////////////////////////////////////////////////////////////////////////////
+    /*public ArrayList<Integer> read(){
         ArrayList<Integer> i = new ArrayList<>();
         Boolean thatsAll = false;
         while (!thatsAll){
@@ -74,38 +75,30 @@ public class Client {
             throw new RuntimeException(e);
         }
         return i;
-    }
+    }*/
+    /// //////////////////////////////////////////////////////////////////
     public Bitmap readBitmap(int sx, int sy){
-        /*ArrayList<String> a = new ArrayList<>();
-        a = readStr();*/
         int y=0;
         int x=0;
         try {
             BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String s = "";
-
-            for (int z = 0; z < sx * sy; z++) {
-                //while(b){
+            for (int z = 0; z < sx * sy; z++) { //Получаем все значения для размеров bitmap-а
                 s = bf.readLine();
-                if(s.length()>0) {
+                if(!s.isEmpty()) {
                     int b = (int) s.charAt(0);
-                    // Log.e("", s);
-                    //Log.e("", ""+b);
-                    if (s.equals("n")) {
+                    if (s.equals("n")) { //новая строчка
                         y += 1;
                         x = 0;
                     } else {
                         x += 1;
                         if (x < bit.getWidth() && y < bit.getHeight()) {
-                        /*if(mathUtil.isNumeric(s)) {
-                            bit.setPixel(x, y, Color.rgb(Integer.parseInt(b), 0, 0));
-                        }*/
                             bit.setPixel(x, y, Color.rgb(b, 0, 0));
                         }
                     }
                 }
             }
-            Log.e("", "thats all");
+            Log.e("", "thats all"); //фиксируем изменения
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

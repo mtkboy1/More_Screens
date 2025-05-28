@@ -36,9 +36,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class network_activity extends AppCompatActivity {
-    private Bitmap bitmaps;
-    int TypeOfServer = 0;
-    int sy = 400, sx = 300;
+    int TypeOfServer = 0; //TCP - 0,    UDP - 1
+    int sy = 400, sx = 300; //Размер bitmap-а в пикселях
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,20 +49,18 @@ public class network_activity extends AppCompatActivity {
             return insets;
         });
     }
-    public void host(View view){
+    public void host(View view){ // Сервер
         network_socket server = new network_socket(TypeOfServer);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    //s.getClient();
-
                     server.getClient();
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
                             Bitmap b = Bitmap.createBitmap(sx, sy, Bitmap.Config.ARGB_8888);
-                            Random r = new Random();
+                            Random r = new Random(); //рандом (используется для проверки правильности передачи на клиент
                             b = BitmapUtil.setBackground(b, Color.rgb(255,255,255));
                             b = BitmapUtil.drawRect(b,50,10,50,50,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
