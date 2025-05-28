@@ -37,9 +37,9 @@ public class ClientUDP {
             byte[] received = packet.getData();
             Log.e("","recived: "+ b);
             for(int i=0; i<sx*sy; i++){
-                bitmap.setPixel(i%sx,i/sx, Color.rgb(received[i],0,0));
+                bitmap.setPixel(i%sx,i/sx, Color.rgb(255,0,0));
             }
-
+            socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

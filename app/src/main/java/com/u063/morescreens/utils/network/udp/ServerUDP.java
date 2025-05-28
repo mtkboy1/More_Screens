@@ -2,6 +2,7 @@ package com.u063.morescreens.utils.network.udp;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -38,6 +39,8 @@ public class ServerUDP {
 
             DatagramPacket packetSend = new DatagramPacket(b, b.length, packet.getAddress(),packet.getPort());
             socket.send(packetSend);
+            Log.e("","recived: "+packet.getAddress()+packet.getPort());
+            socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -9,9 +9,13 @@ public class network_client {
     private int type = 0;
     private Client client = new Client();
     private ClientUDP clientUDP;
-    public network_client(int type){
+    public network_client(int type,int sx, int sy){
         this.type = type;
+
         if(type==0) {
+            client.setSy(sy);
+            client.setSx(sx);
+            client.init();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -26,9 +30,6 @@ public class network_client {
     public Bitmap readBitmap(int sx, int sy){
         if(type==0){
             client.connect("192.168.0.109",5050);
-            client.setSy(sy);
-            client.setSx(sx);
-            client.init();
             return client.readBitmap(sx,sy);
         } else {
             return clientUDP.readBitmap(sx,sy);

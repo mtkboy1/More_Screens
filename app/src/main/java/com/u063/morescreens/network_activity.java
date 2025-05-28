@@ -37,6 +37,7 @@ import java.util.TimerTask;
 
 public class network_activity extends AppCompatActivity {
     private Bitmap bitmaps;
+    int TypeOfServer = 0;
     int sy = 400, sx = 300;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +50,14 @@ public class network_activity extends AppCompatActivity {
             return insets;
         });
     }
-    Context c = this;
-    Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message message) {
-            Bundle msg = message.getData();
-            ArrayList<String> a = msg.getStringArrayList("data");
-
-            return false;
-        }
-    });
     public void host(View view){
-
-        network_socket server = new network_socket(0);
-
-
+        network_socket server = new network_socket(TypeOfServer);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     //s.getClient();
+
                     server.getClient();
                     TimerTask timerTask = new TimerTask() {
                         @Override
@@ -80,14 +69,11 @@ public class network_activity extends AppCompatActivity {
                             b = BitmapUtil.drawRect(b,10,10,40,40,Color.rgb(50,0,0));
                             b = BitmapUtil.drawRect(b,10,10,10,20,Color.rgb(50,0,0));
                             Bitmap finalB = b;
-                            //String[] bytes = BitmapOperations.getStringArray(0, b);
-                            //byte[][] bytes = BitmapOperations.getByteArray(0,b);
-                            //String[] bytes = BitmapOperations.getByteArray(0,b);
-                            server.sendBitmap(finalB,0);
+                            server.sendBitmap(finalB,TypeOfServer);
                         }
                     };
                     Timer timer = new Timer("hi");
-                    timer.schedule(timerTask,10,100);
+                    timer.schedule(timerTask,10,10);
 
 
                 }
@@ -99,7 +85,7 @@ public class network_activity extends AppCompatActivity {
         host.setVisibility(GONE);
     }
     public void connect(View view){
-        network_client client = new network_client(0);
+        network_client client = new network_client(TypeOfServer,sx,sy);
         ImageView img = findViewById(R.id.src);
         new Thread(new Runnable() {
             @Override

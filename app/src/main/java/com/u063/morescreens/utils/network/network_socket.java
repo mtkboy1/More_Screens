@@ -21,7 +21,9 @@ public class network_socket {
         }
     }
     public void getClient(){
-        server.getClient();
+        if(type==0) {
+            server.getClient();
+        }
     }
     public void sendBitmap(Bitmap bitmap, int id){
         if(type==0) {
